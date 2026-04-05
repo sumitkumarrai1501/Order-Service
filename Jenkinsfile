@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -14,7 +13,6 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -31,18 +29,17 @@ pipeline {
         }
 
         stage('Login to ECR') {
-   stage('Login to ECR') {
-    steps {
-        withCredentials([[
-            $class: 'AmazonWebServicesCredentialsBinding', 
-            credentialsId: 'aws_credentials', 
-            accessKeyVariable: 'AWS_ACCESS_KEY_ID',     // Add AWS_ prefix
-            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' // Add AWS_ prefix
-        ]]) {
-            sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 065109818578.dkr.ecr.us-east-1.amazonaws.com"
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding', 
+                    credentialsId: 'aws_credentials', 
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URI}"
+                }
+            }
         }
-    }
-}
 
         stage('Push to ECR') {
             steps {
