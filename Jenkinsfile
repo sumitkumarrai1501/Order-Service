@@ -31,13 +31,13 @@ pipeline {
         }
 
         stage('Login to ECR') {
+   stage('Login to ECR') {
     steps {
-        // 'aws-credentials-id' must match the ID you gave in Jenkins Credentials Manager
         withCredentials([[
             $class: 'AmazonWebServicesCredentialsBinding', 
-            credentialsId: 'aws_credentials', // Change this to your Credential ID
-            accessKeyVariable: 'ACCESS_KEY_ID', 
-            secretKeyVariable: 'SECRET_ACCESS_KEY'
+            credentialsId: 'aws_credentials', 
+            accessKeyVariable: 'AWS_ACCESS_KEY_ID',     // Add AWS_ prefix
+            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' // Add AWS_ prefix
         ]]) {
             sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 065109818578.dkr.ecr.us-east-1.amazonaws.com"
         }
